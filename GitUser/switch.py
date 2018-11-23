@@ -27,14 +27,32 @@
 #:: SOFTWARE.
 #::
 #:::::::::::::::::::::::::
+import subprocess
+import os, sys
+from colorama import Fore, Back, Style
+from colorama import init as init_colorama
+init_colorama()
+
+def system(*args, **kwargs):
+    kwargs.setdefault('stdout', subprocess.PIPE)
+    proc = subprocess.Popen(args, **kwargs)
+    out, err = proc.communicate()
+    return out
 
 def command( iArgs, iConfig, iRegistry ):
-    print( "not implemented yet" )    
-    # sysplatform = sys.platform
-    # if sysplatform == "win32":
-        # os.system( 'call "Engine/Binaries/DotNET/GitDependencies.exe"' )
-        # os.system( "OdysseyDependencies -d" )
-    # elif sysplatform == "darwin":
-        # print( "error" )
-    # elif sysplatform == "linux":
-        # print( "error" )
+    if len( iArgs ) > 1:
+        print( "Additional arguments were ignored" )
+
+    # Arg parsing
+    arg_profile = ""
+    if len( iArgs ):
+        arg_profile = iArgs[0]
+
+    if not arg_profile in iRegistry:
+        print( Fore.RED + "error: profile '{0}' not found".format( arg_profile ) + Style.RESET_ALL )
+        sys.exit()
+
+    profile_name    = iRegistry[arg_profile]["name"]
+    profile_email   = iRegistry[arg_profile]["email"]
+    ret_name    = system( "git", "config", "user.name", profile_name ).decode('utf-8').strip()
+    ret_email   = system( "git", "config", "user.email", profile_email ).decode('utf-8').strip()

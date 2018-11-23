@@ -27,6 +27,20 @@
 #:: SOFTWARE.
 #::
 #:::::::::::::::::::::::::
+import subprocess
+import os, sys
+from colorama import Fore, Back, Style
+from colorama import init as init_colorama
+init_colorama()
+
+def system(*args, **kwargs):
+    kwargs.setdefault('stdout', subprocess.PIPE)
+    proc = subprocess.Popen(args, **kwargs)
+    out, err = proc.communicate()
+    return out
 
 def command( iArgs, iConfig, iRegistry ):
-    print( "not implemented yet" )
+    ret_name    = system( "git", "config", "user.name" ).decode('utf-8').strip()
+    ret_email   = system( "git", "config", "user.email" ).decode('utf-8').strip()
+    print( ret_name )
+    print( ret_email )

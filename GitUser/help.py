@@ -27,6 +27,73 @@
 #:: SOFTWARE.
 #::
 #:::::::::::::::::::::::::
+from colorama import Fore, Back, Style
+from colorama import init as init_colorama
+init_colorama()
 
 def command( iArgs, iConfig, iRegistry ):
-    print( "not implemented yet" )
+
+    style_title = Back.WHITE + Fore.BLACK
+    style_text  = Back.BLACK + Fore.WHITE
+
+    
+    def make_offset( iSize ):
+        str_offset = ""
+        for i in range( iSize ):
+            str_offset += " "
+        return str_offset
+
+    def print_title():
+        print( style_title + "Usage: GitUser <command> [<args>]" )
+        print( style_text  )
+
+    def print_entry( iEntry ):
+        name    = iEntry["name"]
+        alias   = iEntry["alias"]
+        args    = iEntry["args"]
+        short   = iEntry["short"]
+        if alias    is None:    alias   = ""
+        if args     is None:    args    = ""
+        lname   = len( name )
+        lalias  = len( alias )
+        largs   = len( args )
+        lshort  = len( short )
+        iname = 4
+        ialias = 16
+        iargs = 24
+        ishort = 40
+        offset0 = make_offset( iname )
+        offset1 = make_offset( ialias - lname - iname )
+        offset2 = make_offset( iargs - lalias - ialias )
+        offset3 = make_offset( ishort - largs - iargs )
+        print( offset0 + name + offset1 + alias + offset2 + args + offset3 + short )
+
+    # help command
+    def help():
+        print_title()
+        print( "These are the available commands:" )
+        print( "" )
+        for entry in iConfig["keys"]:
+            print_entry( entry )
+
+    # Parse args
+    help_command = ""
+    if len( iArgs ):
+        help_command = iArgs[0]
+
+    # Exec
+    if help_command == "":
+        help()
+        return
+
+    bFound = False
+    for entry in iConfig["keys"]:
+        if help_command == entry["name"] or help_command == entry["alias"]:
+            bFound = True
+            print_title()
+            print_entry( entry )
+            print( "" )
+            print( entry["doc"] )
+            break
+    
+    if not bFound: OdysseyDependencies.utils.command_error( help_command )

@@ -29,4 +29,13 @@
 #:::::::::::::::::::::::::
 
 def command( iArgs, iConfig, iRegistry ):
-    print( "not implemented yet" )
+    if len( iArgs ):
+        print( "Additional arguments were ignored" )
+    
+    offset8 = "        "
+    for entry in iRegistry:
+            print( entry )
+            print( offset8 + iRegistry[entry]["name"] )
+            print( offset8 + iRegistry[entry]["email"] )
+            print( "" )
+            
