@@ -1,0 +1,19 @@
+{
+    "perso" :
+    {
+        "name"  : "Jean Duval",
+        "email" : "jean.duval@wanadoo.fr"
+    },
+
+    "pro" :
+    {
+        "name"  : "Jean-Dev",
+        "email" : "jean.dev@societe.com"
+    },
+
+    "admin" :
+    {
+        "name"  : "Admin",
+        "email" : "admin@societe.com"
+    }
+}
